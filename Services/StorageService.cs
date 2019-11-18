@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using tree_api.Interfaces;
 using tree_api.Models;
@@ -13,25 +15,26 @@ namespace tree_api.Services {
         private readonly IJsonService _jsonService;
         private const string TreeFileName = "tree.json";
 
-        public StorageService (IJsonService jsonService) {
+        public StorageService (IJsonService jsonService, IWebHostEnvironment env) {
             _jsonService = jsonService;
-            if (!File.Exists (TreeFileName)) {
-                SaveTree (new Tree {
-                    Root = new Node ("A",
-                        new Node ("B",
-                            new Node ("E"),
-                            new Node ("F"),
-                            new Node ("G")),
-                        new Node ("C",
-                            new Node ("H")),
-                        new Node ("D",
-                            new Node ("I",
-                                new Node ("K"),
-                                new Node ("L"),
-                                new Node ("M")),
-                            new Node ("J"))
-                    )
-                });
+            if (!File.Exists (TreeFileName) && env.IsDevelopment ()) {
+                SaveTree(new Tree{ });
+                // SaveTree (new Tree {
+                //     Root = new Node ("A",
+                //         new Node ("B",
+                //             new Node ("E"),
+                //             new Node ("F"),
+                //             new Node ("G")),
+                //         new Node ("C",
+                //             new Node ("H")),
+                //         new Node ("D",
+                //             new Node ("I",
+                //                 new Node ("K"),
+                //                 new Node ("L"),
+                //                 new Node ("M")),
+                //             new Node ("J"))
+                //     )
+                // });
             }
         }
 

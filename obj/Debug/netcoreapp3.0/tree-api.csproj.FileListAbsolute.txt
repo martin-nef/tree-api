@@ -1,7 +1,6 @@
 Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\appsettings.Development.json
 Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\appsettings.json
 Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\Properties\launchSettings.json
-Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\tree.json
 Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\tree-api.exe
 Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\tree-api.deps.json
 Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\tree-api.runtimeconfig.json
@@ -21,3 +20,5 @@ Z:\Projects\tree-api\obj\Debug\netcoreapp3.0\tree-api.RazorTargetAssemblyInfo.ca
 Z:\Projects\tree-api\obj\Debug\netcoreapp3.0\tree-api.csproj.CopyComplete
 Z:\Projects\tree-api\obj\Debug\netcoreapp3.0\tree-api.dll
 Z:\Projects\tree-api\obj\Debug\netcoreapp3.0\tree-api.pdb
+Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\exampletree.json
+Z:\Projects\tree-api\bin\Debug\netcoreapp3.0\tree.json

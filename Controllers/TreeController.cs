@@ -26,9 +26,16 @@ namespace tree_api.Controllers {
         }
 
         [HttpGet]
-        [Route ("Get/{name}")]
-        public string Get (string name) {
-            return HandleAction (() => _storage.GetTree ().Root.GetNodeByName (name), $"Failed to retreive tree node named {name}");
+        [Route ("Get/{name?}")]
+        public string Get (string name = null) {
+            return HandleAction (() => {
+                var tree = _storage.GetTree ();
+                if (string.IsNullOrWhiteSpace (name)) {
+                    return tree.Root;
+                } else {
+                    return tree.Root.GetNodeByName (name);
+                }
+            }, $"Failed to retreive tree node named {name}");
         }
 
         [HttpDelete]
@@ -41,9 +48,15 @@ namespace tree_api.Controllers {
             }, failMessage: $"Failed to delete tree node named {name}");
         }
 
-        [HttpPut]
+        [HttpPost]
+        [Route ("Update/{name}/{value}")]
+        public string Update (string name, string value) {
+            return Update (new Node (name) { Value = value, Children = null });
+        }
+
+        [HttpPost]
         [Route ("Update")]
-        public string Update (Node node) {
+        public string Update ([FromBody] Node node) {
             return HandleAction (action: () => {
                 var tree = _storage.GetTree ();
                 var oldNode = tree.Root.GetNodeByName (node.Name);
@@ -52,8 +65,14 @@ namespace tree_api.Controllers {
             }, failMessage: $"Failed to update node named {node.Name}");
         }
 
+        [HttpPut]
+        [Route ("Create/{name}/{value}/{parentName?}")]
+        public string Create (string name, string value, string parentName = null) {
+            return Create (new Node (name: name) { Value = value }, parentName);
+        }
+
         [HttpPost]
-        [Route ("Create")]
+        [Route ("Create/{parentName?}")]
         public string Create ([FromBody] Node node, string parentName = null) {
             return HandleAction (action: () => {
                     var tree = _storage.GetTree ();
@@ -61,7 +80,7 @@ namespace tree_api.Controllers {
                         var oldNode = tree.Root.GetNodeByName (name: parentName);
                         oldNode.AddChild (oldNode);
                     } else {
-                        tree.Root.AddChild (node);
+                        tree.Root = node;
                     }
                     _storage.SaveTree (tree);
                 },
@@ -71,7 +90,10 @@ namespace tree_api.Controllers {
         private string HandleAction (Func<object> action, string failMessage) {
             try {
                 var result = action?.Invoke ();
-                return _jsonService.Serialize (result);
+                return _jsonService.Serialize (new {
+                    success = true,
+                    result = result
+                });
             } catch (Exception e) {
                 _logger.LogError (e, failMessage);
                 if (_env.IsDevelopment ()) {
@@ -79,7 +101,7 @@ namespace tree_api.Controllers {
                 } else {
                     return _jsonService.Serialize (new {
                         success = false,
-                            message = failMessage,
+                        message = failMessage,
                     });
                 }
             }

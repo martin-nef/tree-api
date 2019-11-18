@@ -50,7 +50,7 @@ namespace tree_api.Models {
             } else {
                 for (int i = 0; i < Children.Count; i++) {
                     var child = Children[i];
-                    var nodeFound = ((Node)child)._GetNodeByName (name);
+                    var nodeFound = ((Node) child)._GetNodeByName (name);
                     if (nodeFound != null) {
                         return nodeFound;
                     }
@@ -83,11 +83,15 @@ namespace tree_api.Models {
             var _value = Value;
             Value = node.Value;
             var _children = Children;
-            Children = node.Children;
+            if (node.Children != null) {
+                Children = node.Children;
+            }
             // If names need to be unique
             if (!CheckNamesUnique ()) {
                 Value = _value;
-                Children = _children;
+                if (node.Children != null) {
+                    Children = _children;
+                }
                 throw new Exception ($"Failed to update node named '{node?.Name}', duplicate names detected in the tree");
             }
         }
