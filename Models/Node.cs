@@ -43,13 +43,14 @@ namespace tree_api.Models {
         }
 
         /// Worst case time complexity here is O(n) where 'n' is the number of nodes in the tree.
-        public Node _GetNodeByName (string name) {
+        /// Since the children and siblings and their orders are important, we can't improve this performance much.
+        internal Node _GetNodeByName (string name) {
             if (this.Name == name) {
                 return this;
             } else {
                 for (int i = 0; i < Children.Count; i++) {
                     var child = Children[i];
-                    var nodeFound = child.GetNodeByName (name);
+                    var nodeFound = ((Node)child)._GetNodeByName (name);
                     if (nodeFound != null) {
                         return nodeFound;
                     }
